@@ -1,0 +1,31 @@
+!!python/object/new:dynamic_reconfigure.encoding.Config
+dictitems:
+  filterByArea: true
+  filterByCircularity: false
+  filterByConvexity: false
+  filterByInertia: true
+  groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+    dictitems:
+      filterByArea: true
+      filterByCircularity: false
+      filterByConvexity: false
+      filterByInertia: true
+      groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      id: 0
+      minArea: 20
+      minCircularity: 0.05
+      minConvexity: 0.14
+      minInertiaRatio: 0.7
+      name: Default
+      parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      parent: 0
+      state: true
+      type: ''
+    state: []
+  minArea: 20
+  minCircularity: 0.05
+  minConvexity: 0.14
+  minInertiaRatio: 0.7
+state: []

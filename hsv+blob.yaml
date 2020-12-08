@@ -1,0 +1,68 @@
+!!python/object/new:dynamic_reconfigure.encoding.Config
+dictitems:
+  filterByArea: true
+  filterByCircularity: false
+  filterByConvexity: false
+  filterByInertia: true
+  groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+    dictitems:
+      groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+        dictitems:
+          Blob_Detection: !!python/object/new:dynamic_reconfigure.encoding.Config
+            dictitems:
+              filterByArea: true
+              filterByCircularity: false
+              filterByConvexity: false
+              filterByInertia: true
+              groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+                state: []
+              id: 2
+              minArea: 10
+              minCircularity: 0.15
+              minConvexity: 0.87
+              minInertiaRatio: 0.5
+              name: Blob_Detection
+              parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+                state: []
+              parent: 0
+              state: true
+              type: ''
+            state: []
+          HSV_thresholding: !!python/object/new:dynamic_reconfigure.encoding.Config
+            dictitems:
+              groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+                state: []
+              high_H_param: 109
+              high_S_param: 157
+              high_V_param: 210
+              id: 1
+              low_H_param: 75
+              low_S_param: 85
+              low_V_param: 131
+              name: HSV_thresholding
+              parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+                state: []
+              parent: 0
+              state: true
+              type: ''
+            state: []
+        state: []
+      id: 0
+      name: Default
+      parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      parent: 0
+      state: true
+      type: ''
+    state: []
+  high_H_param: 109
+  high_S_param: 157
+  high_V_param: 210
+  low_H_param: 75
+  low_S_param: 85
+  low_V_param: 131
+  minArea: 10
+  minCircularity: 0.15
+  minConvexity: 0.87
+  minInertiaRatio: 0.5
+state: []

@@ -1,0 +1,96 @@
+#!/usr/bin/env python
+
+import rospy
+import numpy as np
+
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge, CvBridgeError
+import cv2
+
+from dynamic_reconfigure.server import Server
+from ping_pong_follower.cfg import HSVandBlobConfig
+
+class ReallyKeinBockMehr:
+
+    def __init__(self, topic = "/camera/rgb/image_rect_color", do_publish = True):
+
+        self.srv = Server(HSVandBlobConfig, self.dynamic_reconfigure_callback)
+
+        ###actually we don't need to start the values. on start dynamic_reconfigure issues a callback.
+
+        self.image_topic = topic
+
+        self.bridge = CvBridge()
+        self.do_publish = do_publish
+
+        rospy.Subscriber(self.image_topic, Image, self.image_callback)
+        if self.do_publish:
+            self.image_pub = rospy.Publisher("blob_image", Image, queue_size=1)
+            rospy.loginfo_once("I must have an image publisher.")
+
+    def dynamic_reconfigure_callback(self, config, level):
+
+        rospy.logdebug("""Reconfigure Request: SimpleBlobDetector_Params
+                      {filterByArea}, {minArea},\
+               {filterByCircularity}, {minCircularity},\
+               {filterByConvexity}, {minConvexity},\
+              {filterByInertia}, {minInertiaRatio},\
+              """.format(**config))
+        params = cv2.SimpleBlobDetector_Params()
+        params.blobColor = 255 # we want the white blobs
+        # Filter by Area.
+        params.filterByArea = config['filterByArea']
+        params.minArea = config['minArea']
+        # Filter by Circularity
+        params.filterByCircularity =  config['filterByCircularity']
+        params.minCircularity = config['minCircularity']
+        # Filter by Convexity
+        params.filterByConvexity = config['filterByConvexity']
+        params.minConvexity = config['minConvexity']
+        # Filter by Inertia
+        params.filterByInertia = config['filterByInertia']
+        params.minInertiaRatio = config['minInertiaRatio']
+
+        self.detector = cv2.SimpleBlobDetector_create(params)
+
+        rospy.logdebug("""Reconfigure Request: H {low_H_param}, {high_H_param},\
+              S {low_S_param}, {high_S_param},\
+              V {low_V_param}, {high_V_param},\
+              """.format(**config))
+        self.low_H     = config['low_H_param']
+        self.high_H    = config['high_H_param']
+        self.low_S     = config['low_S_param']
+        self.high_S    = config['high_S_param']
+        self.low_V     = config['low_V_param']
+        self.high_V    = config['high_V_param']
+
+        return config
+
+    def image_callback(self, msg):
+        try:
+            # Convert your ROS Image message to OpenCV2
+            cv2_img = self.bridge.imgmsg_to_cv2(msg, "rgb8")
+            frame_HSV = cv2.cvtColor(cv2_img, cv2.COLOR_BGR2HSV)
+            frame_threshold = cv2.inRange(frame_HSV, (self.low_H, self.low_S, self.low_V), (self.high_H, self.high_S, self.high_V))
+            keypoints = self.detector.detect(frame_threshold)
+            if keypoints:
+                print(dir(keypoints))
+            if self.do_publish:
+                ##we can draw as well.
+                im_with_keypoints = cv2.drawKeypoints(frame_threshold, keypoints, np.array([]), (0,0,255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+        except CvBridgeError, e:
+            print(e)
+        else:
+            if self.do_publish:
+                msg = self.bridge.cv2_to_imgmsg(im_with_keypoints, encoding="bgr8") ##its already timestamped. i dont need to do this!
+                self.image_pub.publish(msg)
+                rospy.loginfo_once("I must have published something.")
+
+
+if __name__ == "__main__":
+    rospy.init_node("ping_pong_follower", anonymous = False)
+
+
+    mytHING = ReallyKeinBockMehr()
+    rospy.spin()

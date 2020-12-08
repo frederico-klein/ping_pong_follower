@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="publish_images" default="False" />
+  <arg name="ppf_name" default="ping_pong_follower" />
+  <!-- this is per camera. -->
+	<!--rosparam command="load" file="$(find ping_pong_follower)/hsv+blob.yaml" /-->	
+	<!--node name="dyn_param_loader" pkg="dynamic_reconfigure" type="dynparam" args="load /$(arg ppf_name) $(find ping_pong_follower)/hsv+blob.yaml"/-->  
+
+    <node name="$(arg ppf_name)" pkg="ping_pong_follower" type="pp_follow_everything.py" output="screen">
+	<param name="publish_images" value="$(arg publish_images)" />
+    </node>
+
+    <node name="marker_dude" pkg="ping_pong_follower" type="pong_pong.py" output="screen">
+	<remap from="topic" to="/point_pos" />
+    </node>
+
+
+</launch>

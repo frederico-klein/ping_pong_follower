@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<launch>
+  <!-- this is a comment. -->
+
+  <include file="$(find my_pcl_tutorial)/launch/autocrop.launch">
+  </include>
+
+  <include file="$(find my_pcl_tutorial)/launch/local_rgbnodelet.launch">
+  </include>
+	
+<node name="rvizzo" pkg="rviz" type="rviz" output="screen" args="-d $(find ping_pong_follower)/basic_rviz_config.rviz">
+</node>
+
+</launch>
+
+
+
+

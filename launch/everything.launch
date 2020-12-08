@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="publish_images" default="False" />
+  <!-- this is a comment. -->
+
+  <!-- maybe remove extra stuff. bag files are immense!. -->
+  <include file="$(find freenect_launch)/launch/examples/freenect-registered-xyzrgb.launch">
+  </include>
+
+  <include file="$(find my_pcl_tutorial)/launch/autocrop.launch">
+  </include>
+
+  <include file="$(find my_pcl_tutorial)/launch/local_rgbnodelet.launch">
+  </include>
+
+  <include file="$(find ping_pong_follower)/launch/follow_everything_and_marker.launch">
+	<arg name="publish_images" value="$(arg publish_images)" />
+  </include>
+
+</launch>
+
+
+
+
